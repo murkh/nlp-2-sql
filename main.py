@@ -38,7 +38,7 @@ def main():
 
         if not user_input:
             continue
-        if user_input.lower() in ('quit', 'exit', 'q'):
+        if user_input.lower() in ("quit", "exit", "q"):
             print("Goodbye!")
             break
 
@@ -59,11 +59,12 @@ def main():
                 print(f"{'─' * 60}")
                 print(f"  ({len(results) - 1} rows returned)\n")
             else:
-                print(f"\n  ⚠️  Query failed (status: {status}). Please try rephrasing.\n")
+                print(
+                    f"\n  ⚠️  Query failed (status: {status}). Please try rephrasing.\n"
+                )
 
         except Exception as e:
             print(f"\n  ❌ Error: {e}\n")
-
 
 
 if __name__ == "__main__":

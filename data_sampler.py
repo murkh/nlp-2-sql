@@ -25,7 +25,9 @@ class DataSampler:
 
         try:
             # 1. Fetch tables
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
+            cursor.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';"
+            )
             tables = [row[0] for row in cursor.fetchall()]
 
             for table in tables:
@@ -45,7 +47,9 @@ class DataSampler:
                     summary_parts.append("  Sample Rows:")
                     summary_parts.append("    " + " | ".join(col_names))
                     for row in sample_rows:
-                        summary_parts.append("    " + " | ".join(str(val) for val in row))
+                        summary_parts.append(
+                            "    " + " | ".join(str(val) for val in row)
+                        )
                 else:
                     summary_parts.append("  (No data in table)")
 
@@ -58,9 +62,13 @@ class DataSampler:
 
                         # If low cardinality (e.g. between 1 and 10), fetch distinct values
                         if 0 < cardinality <= 10:
-                            cursor.execute(f"SELECT DISTINCT {col} FROM {table} WHERE {col} IS NOT NULL;")
+                            cursor.execute(
+                                f"SELECT DISTINCT {col} FROM {table} WHERE {col} IS NOT NULL;"
+                            )
                             values = [str(r[0]) for r in cursor.fetchall()]
-                            summary_parts.append(f"  Distinct values for column '{col}': {', '.join(values)}")
+                            summary_parts.append(
+                                f"  Distinct values for column '{col}': {', '.join(values)}"
+                            )
 
         except sqlite3.Error as e:
             logger.error(f"Error extracting database samples: {e}")

@@ -17,29 +17,28 @@ queries operate on aggregated data rather than specific named entities.
 # ─────────────────────────────────────────────
 IDENTITY_DATABASE = {
     # Products
-    'wireless mouse': {"id": 1, "type": "product"},
-    'mechanical keyboard': {"id": 2, "type": "product"},
-    'office chair': {"id": 3, "type": "product"},
-    'standing desk': {"id": 4, "type": "product"},
-    'usb-c hub': {"id": 5, "type": "product"},
-    'monitor arm': {"id": 6, "type": "product"},
-    'webcam pro': {"id": 7, "type": "product"},
-    'noise canceling headphones': {"id": 8, "type": "product"},
-    'project management software': {"id": 9, "type": "product"},
-    'cloud storage subscription': {"id": 10, "type": "product"},
+    "wireless mouse": {"id": 1, "type": "product"},
+    "mechanical keyboard": {"id": 2, "type": "product"},
+    "office chair": {"id": 3, "type": "product"},
+    "standing desk": {"id": 4, "type": "product"},
+    "usb-c hub": {"id": 5, "type": "product"},
+    "monitor arm": {"id": 6, "type": "product"},
+    "webcam pro": {"id": 7, "type": "product"},
+    "noise canceling headphones": {"id": 8, "type": "product"},
+    "project management software": {"id": 9, "type": "product"},
+    "cloud storage subscription": {"id": 10, "type": "product"},
     # Sales Reps
-    'alice johnson': {"id": 1, "type": "sales_rep"},
-    'bob smith': {"id": 2, "type": "sales_rep"},
-    'carol williams': {"id": 3, "type": "sales_rep"},
-    'david brown': {"id": 4, "type": "sales_rep"},
+    "alice johnson": {"id": 1, "type": "sales_rep"},
+    "bob smith": {"id": 2, "type": "sales_rep"},
+    "carol williams": {"id": 3, "type": "sales_rep"},
+    "david brown": {"id": 4, "type": "sales_rep"},
     # Customers
-    'techcorp inc': {"id": 1, "type": "customer"},
-    'globalsoft ltd': {"id": 2, "type": "customer"},
+    "techcorp inc": {"id": 1, "type": "customer"},
+    "globalsoft ltd": {"id": 2, "type": "customer"},
 }
 
 
 class IdentityServiceFacade:
-
     @staticmethod
     def resolve(named_resources: set) -> list:
         """
@@ -50,7 +49,7 @@ class IdentityServiceFacade:
         for named_resource in named_resources:
             if named_resource in IDENTITY_DATABASE:
                 eid = IDENTITY_DATABASE[named_resource].copy()
-                eid['name'] = named_resource
+                eid["name"] = named_resource
                 identifiers.append(eid)
         return identifiers
 

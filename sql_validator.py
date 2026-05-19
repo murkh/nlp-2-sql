@@ -41,7 +41,7 @@ class SqlValidator:
             logger.debug(f"Dry-running validation: {explain_query[:120]}")
             cursor.execute(explain_query)
             cursor.fetchall()
-            
+
             return True, None
 
         except sqlite3.Error as e:
@@ -57,7 +57,16 @@ class SqlValidator:
         sql_upper = sql.upper().strip()
 
         # Check for disallowed operations
-        disallowed = ["DROP", "DELETE", "INSERT", "UPDATE", "ALTER", "CREATE", "REPLACE", "TRUNCATE"]
+        disallowed = [
+            "DROP",
+            "DELETE",
+            "INSERT",
+            "UPDATE",
+            "ALTER",
+            "CREATE",
+            "REPLACE",
+            "TRUNCATE",
+        ]
         for cmd in disallowed:
             # Match word boundary to avoid catching columns like "created_at" or "updated_by"
             pattern = rf"\b{cmd}\b"

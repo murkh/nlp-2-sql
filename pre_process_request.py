@@ -15,11 +15,11 @@ import llm_facade
 import domains
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
 class PreProcessRequest:
-
     def __init__(self, llm_inference: llm_facade.LlmFacade):
         self.llm_inference = llm_inference
 
@@ -34,7 +34,9 @@ class PreProcessRequest:
         pre_processed_request = {
             app_consts.USER_QUERY: user_request,
             app_consts.DOMAIN: self.determine_domain(user_request),
-            app_consts.NAMED_RESOURCES: self.get_named_resources_from_user_request(user_request),
+            app_consts.NAMED_RESOURCES: self.get_named_resources_from_user_request(
+                user_request
+            ),
         }
 
         logger.info(
@@ -79,7 +81,12 @@ class PreProcessRequest:
         named_resources = set()
 
         # Clean the user request
-        clean_request = user_request.replace(",", " ").replace(".", " ").replace("?", " ").replace("!", " ")
+        clean_request = (
+            user_request.replace(",", " ")
+            .replace(".", " ")
+            .replace("?", " ")
+            .replace("!", " ")
+        )
         clean_request = clean_request.lower().strip()
 
         # Check for multi-word named resources (sliding window approach)
@@ -87,13 +94,13 @@ class PreProcessRequest:
         for i in range(len(words)):
             # Check 3-word combinations
             if i + 2 < len(words):
-                trigram = f"{words[i]} {words[i+1]} {words[i+2]}"
+                trigram = f"{words[i]} {words[i + 1]} {words[i + 2]}"
                 if IdentityServiceFacade.is_named_resource(trigram):
                     named_resources.add(trigram)
                     continue
             # Check 2-word combinations
             if i + 1 < len(words):
-                bigram = f"{words[i]} {words[i+1]}"
+                bigram = f"{words[i]} {words[i + 1]}"
                 if IdentityServiceFacade.is_named_resource(bigram):
                     named_resources.add(bigram)
 

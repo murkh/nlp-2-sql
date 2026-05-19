@@ -26,8 +26,7 @@ DOMAIN_DESC = "sales"
 # System Prompt Instructions
 # Defines the LLM's role, dialect, and output format
 # ─────────────────────────────────────────────
-SYSTEM_PROMPT_INSTRUCTIONS = \
-    """You are a SQL expert specializing in sales analytics. Given the following SQL table definitions, generate SQL to answer the user's question.
+SYSTEM_PROMPT_INSTRUCTIONS = """You are a SQL expert specializing in sales analytics. Given the following SQL table definitions, generate SQL to answer the user's question.
 
 Each user question is about sales data: products, orders, revenue, customers, and regional analytics.
 If the user asks about "last month", calculate it relative to the current date using date('now', 'start of month', '-1 month') for the start and date('now', 'start of month', '-1 day') for the end.
@@ -51,8 +50,7 @@ USER_PROMPT = "question: "
 # Per AWS best practice: augment DDL with descriptions
 # of tables, columns, and data semantics
 # ─────────────────────────────────────────────
-ANNOTATED_SQL_DEFINITIONS = \
-    """-- The products table stores the product catalog with pricing and categorization
+ANNOTATED_SQL_DEFINITIONS = """-- The products table stores the product catalog with pricing and categorization
 CREATE TABLE products (
     product_id INTEGER PRIMARY KEY,         -- unique identifier for each product
     product_name TEXT NOT NULL,             -- display name of the product (e.g., 'Wireless Mouse', 'Office Chair')
@@ -159,8 +157,7 @@ SQL_PREAMBLE_PT2 = [""]
 # Per AWS best practice: diverse examples across
 # common query patterns improve LLM accuracy
 # ─────────────────────────────────────────────
-FEW_SHOT_EXAMPLES = \
-    """<example>
+FEW_SHOT_EXAMPLES = """<example>
 question: Show total sales for each product last month
 answer: {"sql": "SELECT p.product_name, SUM(oi.line_total) AS total_sales, SUM(oi.quantity) AS units_sold FROM order_items oi INNER JOIN orders o ON oi.order_id = o.order_id INNER JOIN products p ON oi.product_id = p.product_id WHERE o.status = 'completed' AND o.order_date >= date('now', 'start of month', '-1 month') AND o.order_date < date('now', 'start of month') GROUP BY p.product_id, p.product_name ORDER BY total_sales DESC;"}
 </example>
@@ -214,7 +211,11 @@ answer: {"sql": "SELECT p.product_name, p.category, p.stock_quantity, p.unit_pri
 # ─────────────────────────────────────────────
 # Assemble the Complete System Prompt
 # ─────────────────────────────────────────────
-SYSTEM_PROMPT = \
-    SYSTEM_PROMPT_INSTRUCTIONS + JOIN_HINTS + "\n<SQL>\n" + \
-    ANNOTATED_SQL_DEFINITIONS + "</SQL>\n" + \
-    FEW_SHOT_EXAMPLES
+SYSTEM_PROMPT = (
+    SYSTEM_PROMPT_INSTRUCTIONS
+    + JOIN_HINTS
+    + "\n<SQL>\n"
+    + ANNOTATED_SQL_DEFINITIONS
+    + "</SQL>\n"
+    + FEW_SHOT_EXAMPLES
+)

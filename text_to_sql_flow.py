@@ -12,6 +12,7 @@ Following the AWS enterprise NL2SQL architecture:
 4. Generate: Invoke LLM to produce SQL
 5. Execute: Run preamble + generated SQL against the database
 """
+
 from __future__ import annotations
 import app_constants as app_consts
 import identity_service_facade
@@ -22,9 +23,10 @@ import rdbms_facade
 import sql_validator
 
 import logging
+
 logging.basicConfig(
-    format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
-    level=logging.INFO
+    format="[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
+    level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -37,9 +39,10 @@ class TextToSQLFlow:
         self.identity_service_facade = identity_service_facade.IdentityServiceFacade()
         self.llm_facade = llm_facade.LlmFacade(app_consts.OPENAI_MODEL)
         self.rdbms_facade = rdbms_facade.RdbmsFacade()
-        self.pre_process_request = pre_process_request.PreProcessRequest(self.llm_facade)
+        self.pre_process_request = pre_process_request.PreProcessRequest(
+            self.llm_facade
+        )
         self.prepare_request = prepare_request.PrepareRequest()
-
 
     def run(self, user_request: str):
         """
@@ -62,8 +65,11 @@ class TextToSQLFlow:
         # ── Step 1.5: Check for ambiguity / Disambiguation ──
         if app_consts.ENABLE_DISAMBIGUATION and domain != "unknown":
             import disambiguator
+
             db_disambiguator = disambiguator.Disambiguator(self.llm_facade)
-            is_ambiguous, clarification = db_disambiguator.check_ambiguity(user_request, domain)
+            is_ambiguous, clarification = db_disambiguator.check_ambiguity(
+                user_request, domain
+            )
             if is_ambiguous:
                 return [], "clarification", clarification, None
 
@@ -76,7 +82,9 @@ class TextToSQLFlow:
 
         # ── Step 3: Prepare the LLM prompt and SQL preamble ──
         prepared = self.prepare_request.run(pre_processed)
-        logger.debug(f"Prepared prompt length: {len(prepared[app_consts.LLM_PROMPT])} chars")
+        logger.debug(
+            f"Prepared prompt length: {len(prepared[app_consts.LLM_PROMPT])} chars"
+        )
 
         # ── Step 4: Generate SQL via LLM with validation & reprompting ──
         database = app_consts.get_database_for_domain(domain)
@@ -89,9 +97,16 @@ class TextToSQLFlow:
 
         if app_consts.ENABLE_SELF_CONSISTENCY:
             import self_consistency
-            sc_manager = self_consistency.SelfConsistencyManager(self.llm_facade, validator)
+
+            sc_manager = self_consistency.SelfConsistencyManager(
+                self.llm_facade, validator
+            )
             generated_sql = sc_manager.generate_and_select(
-                prompt, user_request, preamble, domain, app_consts.SELF_CONSISTENCY_CANDIDATES
+                prompt,
+                user_request,
+                preamble,
+                domain,
+                app_consts.SELF_CONSISTENCY_CANDIDATES,
             )
             if not generated_sql:
                 logger.error("Self-consistency failed to produce a valid SQL query.")
@@ -126,13 +141,17 @@ class TextToSQLFlow:
                     generated_sql = generated_json
                     break
                 else:
-                    logger.warning(f"SQL validation failed on attempt {attempt}: {err_msg}")
+                    logger.warning(
+                        f"SQL validation failed on attempt {attempt}: {err_msg}"
+                    )
                     if attempt < max_attempts:
                         prompt += f"\n\nYour previous SQL query: {sql_query_str}\nFailed validation with error: {err_msg}\nPlease correct the SQL query to resolve this error. Output the corrected result in JSON format with one key 'sql'."
                     attempt += 1
 
             if not generated_sql:
-                logger.error("Failed to generate valid SQL after maximum reprompt attempts")
+                logger.error(
+                    "Failed to generate valid SQL after maximum reprompt attempts"
+                )
                 return [], f"SQL validation failure: {err_msg}", None, None
 
         # ── Step 5: Execute the SQL ──
@@ -143,8 +162,8 @@ class TextToSQLFlow:
         rdbms_results = results[app_consts.RDBMS_OUTPUT]
         rdbms_status = results[app_consts.PROCESSING_STATUS]
 
-        logger.info(f"Query returned {len(rdbms_results) - 1 if rdbms_results else 0} rows (status: {rdbms_status})")
+        logger.info(
+            f"Query returned {len(rdbms_results) - 1 if rdbms_results else 0} rows (status: {rdbms_status})"
+        )
 
         return rdbms_results, rdbms_status, None, generated_sql[app_consts.SQL]
-
-

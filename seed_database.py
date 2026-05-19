@@ -105,52 +105,288 @@ def seed_products(cursor):
         (9, "Project Management Software", "Software", 19.99, 2.00, 999, 1),
         (10, "Cloud Storage Subscription", "Software", 9.99, 1.50, 999, 1),
     ]
-    cursor.executemany(
-        "INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", products
-    )
+    cursor.executemany("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", products)
 
 
 def seed_customers(cursor):
     """Insert diverse customer base across 4 regions."""
     customers = [
         # North America
-        (1, "TechCorp Inc", "info@techcorp.com", "North America", "United States", "Enterprise", "2023-01-15"),
-        (2, "DataFlow LLC", "sales@dataflow.com", "North America", "United States", "SMB", "2023-03-22"),
-        (3, "Maple Systems", "contact@maplesys.ca", "North America", "Canada", "Regular", "2023-06-10"),
-        (4, "Silicon Valley Startups", "hello@svs.com", "North America", "United States", "SMB", "2023-08-01"),
-        (5, "Pacific Innovations", "info@pacinno.com", "North America", "United States", "Enterprise", "2023-02-14"),
-        (6, "Northern Lights Tech", "info@nlt.ca", "North America", "Canada", "Regular", "2023-11-20"),
-        (7, "Quantum Solutions", "hello@quantum.com", "North America", "United States", "VIP", "2023-01-05"),
-        (8, "MountainView Analytics", "contact@mva.com", "North America", "United States", "SMB", "2024-01-10"),
+        (
+            1,
+            "TechCorp Inc",
+            "info@techcorp.com",
+            "North America",
+            "United States",
+            "Enterprise",
+            "2023-01-15",
+        ),
+        (
+            2,
+            "DataFlow LLC",
+            "sales@dataflow.com",
+            "North America",
+            "United States",
+            "SMB",
+            "2023-03-22",
+        ),
+        (
+            3,
+            "Maple Systems",
+            "contact@maplesys.ca",
+            "North America",
+            "Canada",
+            "Regular",
+            "2023-06-10",
+        ),
+        (
+            4,
+            "Silicon Valley Startups",
+            "hello@svs.com",
+            "North America",
+            "United States",
+            "SMB",
+            "2023-08-01",
+        ),
+        (
+            5,
+            "Pacific Innovations",
+            "info@pacinno.com",
+            "North America",
+            "United States",
+            "Enterprise",
+            "2023-02-14",
+        ),
+        (
+            6,
+            "Northern Lights Tech",
+            "info@nlt.ca",
+            "North America",
+            "Canada",
+            "Regular",
+            "2023-11-20",
+        ),
+        (
+            7,
+            "Quantum Solutions",
+            "hello@quantum.com",
+            "North America",
+            "United States",
+            "VIP",
+            "2023-01-05",
+        ),
+        (
+            8,
+            "MountainView Analytics",
+            "contact@mva.com",
+            "North America",
+            "United States",
+            "SMB",
+            "2024-01-10",
+        ),
         # Europe
-        (9, "GlobalSoft Ltd", "info@globalsoft.co.uk", "Europe", "United Kingdom", "Enterprise", "2023-04-18"),
-        (10, "BerlinTech GmbH", "kontakt@berlintech.de", "Europe", "Germany", "SMB", "2023-05-25"),
-        (11, "Paris Digital", "bonjour@parisdigital.fr", "Europe", "France", "Regular", "2023-07-14"),
-        (12, "Nordic Innovations", "hello@nordic.se", "Europe", "Sweden", "SMB", "2023-09-30"),
-        (13, "Mediterranean Systems", "info@medsys.es", "Europe", "Spain", "Regular", "2024-02-01"),
-        (14, "Alpine Solutions AG", "info@alpinesol.ch", "Europe", "Switzerland", "VIP", "2023-03-12"),
+        (
+            9,
+            "GlobalSoft Ltd",
+            "info@globalsoft.co.uk",
+            "Europe",
+            "United Kingdom",
+            "Enterprise",
+            "2023-04-18",
+        ),
+        (
+            10,
+            "BerlinTech GmbH",
+            "kontakt@berlintech.de",
+            "Europe",
+            "Germany",
+            "SMB",
+            "2023-05-25",
+        ),
+        (
+            11,
+            "Paris Digital",
+            "bonjour@parisdigital.fr",
+            "Europe",
+            "France",
+            "Regular",
+            "2023-07-14",
+        ),
+        (
+            12,
+            "Nordic Innovations",
+            "hello@nordic.se",
+            "Europe",
+            "Sweden",
+            "SMB",
+            "2023-09-30",
+        ),
+        (
+            13,
+            "Mediterranean Systems",
+            "info@medsys.es",
+            "Europe",
+            "Spain",
+            "Regular",
+            "2024-02-01",
+        ),
+        (
+            14,
+            "Alpine Solutions AG",
+            "info@alpinesol.ch",
+            "Europe",
+            "Switzerland",
+            "VIP",
+            "2023-03-12",
+        ),
         # Asia Pacific
-        (15, "Tokyo Systems KK", "info@tokyosys.jp", "Asia Pacific", "Japan", "Enterprise", "2023-02-28"),
-        (16, "SingaporeTech Pte", "hello@sgtech.sg", "Asia Pacific", "Singapore", "SMB", "2023-06-15"),
-        (17, "Mumbai Digital", "info@mumbaidigital.in", "Asia Pacific", "India", "Regular", "2023-08-22"),
-        (18, "Seoul Innovations", "contact@seolinno.kr", "Asia Pacific", "South Korea", "SMB", "2023-10-05"),
-        (19, "Sydney Solutions", "g'day@sydsol.au", "Asia Pacific", "Australia", "Regular", "2024-01-15"),
-        (20, "Shanghai Enterprise Co", "info@shent.cn", "Asia Pacific", "China", "Enterprise", "2023-04-08"),
-        (21, "Bangalore Tech Hub", "info@blrtech.in", "Asia Pacific", "India", "SMB", "2023-12-01"),
-        (22, "KL Digital Sdn Bhd", "hello@kldigital.my", "Asia Pacific", "Malaysia", "Regular", "2024-03-10"),
+        (
+            15,
+            "Tokyo Systems KK",
+            "info@tokyosys.jp",
+            "Asia Pacific",
+            "Japan",
+            "Enterprise",
+            "2023-02-28",
+        ),
+        (
+            16,
+            "SingaporeTech Pte",
+            "hello@sgtech.sg",
+            "Asia Pacific",
+            "Singapore",
+            "SMB",
+            "2023-06-15",
+        ),
+        (
+            17,
+            "Mumbai Digital",
+            "info@mumbaidigital.in",
+            "Asia Pacific",
+            "India",
+            "Regular",
+            "2023-08-22",
+        ),
+        (
+            18,
+            "Seoul Innovations",
+            "contact@seolinno.kr",
+            "Asia Pacific",
+            "South Korea",
+            "SMB",
+            "2023-10-05",
+        ),
+        (
+            19,
+            "Sydney Solutions",
+            "g'day@sydsol.au",
+            "Asia Pacific",
+            "Australia",
+            "Regular",
+            "2024-01-15",
+        ),
+        (
+            20,
+            "Shanghai Enterprise Co",
+            "info@shent.cn",
+            "Asia Pacific",
+            "China",
+            "Enterprise",
+            "2023-04-08",
+        ),
+        (
+            21,
+            "Bangalore Tech Hub",
+            "info@blrtech.in",
+            "Asia Pacific",
+            "India",
+            "SMB",
+            "2023-12-01",
+        ),
+        (
+            22,
+            "KL Digital Sdn Bhd",
+            "hello@kldigital.my",
+            "Asia Pacific",
+            "Malaysia",
+            "Regular",
+            "2024-03-10",
+        ),
         # Latin America
-        (23, "São Paulo Systems", "contato@spsystems.br", "Latin America", "Brazil", "SMB", "2023-05-12"),
-        (24, "Buenos Aires Tech", "hola@batech.ar", "Latin America", "Argentina", "Regular", "2023-07-20"),
-        (25, "Mexico Digital SA", "info@mexdigital.mx", "Latin America", "Mexico", "SMB", "2023-09-15"),
-        (26, "Lima Innovations", "info@limainno.pe", "Latin America", "Peru", "Regular", "2024-01-25"),
-        (27, "Santiago Software", "contacto@santiagosw.cl", "Latin America", "Chile", "SMB", "2023-11-08"),
-        (28, "Bogota Cloud Services", "info@bogotacloud.co", "Latin America", "Colombia", "Regular", "2024-02-14"),
-        (29, "Caribbean Digital", "hello@caribdigital.jm", "Latin America", "Jamaica", "Regular", "2024-04-01"),
-        (30, "Montevideo Systems", "info@mvdsys.uy", "Latin America", "Uruguay", "Regular", "2024-05-01"),
+        (
+            23,
+            "São Paulo Systems",
+            "contato@spsystems.br",
+            "Latin America",
+            "Brazil",
+            "SMB",
+            "2023-05-12",
+        ),
+        (
+            24,
+            "Buenos Aires Tech",
+            "hola@batech.ar",
+            "Latin America",
+            "Argentina",
+            "Regular",
+            "2023-07-20",
+        ),
+        (
+            25,
+            "Mexico Digital SA",
+            "info@mexdigital.mx",
+            "Latin America",
+            "Mexico",
+            "SMB",
+            "2023-09-15",
+        ),
+        (
+            26,
+            "Lima Innovations",
+            "info@limainno.pe",
+            "Latin America",
+            "Peru",
+            "Regular",
+            "2024-01-25",
+        ),
+        (
+            27,
+            "Santiago Software",
+            "contacto@santiagosw.cl",
+            "Latin America",
+            "Chile",
+            "SMB",
+            "2023-11-08",
+        ),
+        (
+            28,
+            "Bogota Cloud Services",
+            "info@bogotacloud.co",
+            "Latin America",
+            "Colombia",
+            "Regular",
+            "2024-02-14",
+        ),
+        (
+            29,
+            "Caribbean Digital",
+            "hello@caribdigital.jm",
+            "Latin America",
+            "Jamaica",
+            "Regular",
+            "2024-04-01",
+        ),
+        (
+            30,
+            "Montevideo Systems",
+            "info@mvdsys.uy",
+            "Latin America",
+            "Uruguay",
+            "Regular",
+            "2024-05-01",
+        ),
     ]
-    cursor.executemany(
-        "INSERT INTO customers VALUES (?, ?, ?, ?, ?, ?, ?)", customers
-    )
+    cursor.executemany("INSERT INTO customers VALUES (?, ?, ?, ?, ?, ?, ?)", customers)
 
 
 def seed_sales_reps(cursor):
@@ -162,9 +398,7 @@ def seed_sales_reps(cursor):
         (4, "David Brown", "Latin America", "2023-03-20"),
         (5, "Eva Martinez", "North America", "2023-07-01"),
     ]
-    cursor.executemany(
-        "INSERT INTO sales_reps VALUES (?, ?, ?, ?)", reps
-    )
+    cursor.executemany("INSERT INTO sales_reps VALUES (?, ?, ?, ?)", reps)
 
 
 def seed_orders_and_items(cursor):
@@ -196,7 +430,9 @@ def seed_orders_and_items(cursor):
     end_date = datetime.now()
     start_date = end_date - timedelta(days=365)
 
-    statuses = ['completed'] * 85 + ['pending'] * 8 + ['cancelled'] * 5 + ['refunded'] * 2
+    statuses = (
+        ["completed"] * 85 + ["pending"] * 8 + ["cancelled"] * 5 + ["refunded"] * 2
+    )
 
     for _ in range(250):
         # Random date in the last 12 months
@@ -218,11 +454,15 @@ def seed_orders_and_items(cursor):
             product_id = random.choice(product_ids)
             quantity = random.randint(1, 10)
             price = product_prices[product_id]
-            discount = random.choice([0, 0, 0, 5, 10, 15, 20])  # Most orders have no discount
+            discount = random.choice(
+                [0, 0, 0, 5, 10, 15, 20]
+            )  # Most orders have no discount
             line_total = round(quantity * price * (1 - discount / 100), 2)
             order_total += line_total
 
-            items.append((item_id, order_id, product_id, quantity, price, discount, line_total))
+            items.append(
+                (item_id, order_id, product_id, quantity, price, discount, line_total)
+            )
             item_id += 1
 
         order_total = round(order_total, 2)
@@ -230,7 +470,7 @@ def seed_orders_and_items(cursor):
         # Insert order
         cursor.execute(
             "INSERT INTO orders VALUES (?, ?, ?, ?, ?)",
-            (order_id, customer_id, order_date, status, order_total)
+            (order_id, customer_id, order_date, status, order_total),
         )
 
         # Insert line items
@@ -241,8 +481,7 @@ def seed_orders_and_items(cursor):
         # Assign to sales rep based on customer region
         rep_id = random.choice(region_to_reps[region])
         cursor.execute(
-            "INSERT INTO order_assignments VALUES (?, ?)",
-            (order_id, rep_id)
+            "INSERT INTO order_assignments VALUES (?, ?)", (order_id, rep_id)
         )
 
         order_id += 1
@@ -254,7 +493,14 @@ def seed_database():
     cursor = conn.cursor()
 
     # Drop existing tables for clean seed
-    tables = ['order_assignments', 'order_items', 'orders', 'sales_reps', 'customers', 'products']
+    tables = [
+        "order_assignments",
+        "order_items",
+        "orders",
+        "sales_reps",
+        "customers",
+        "products",
+    ]
     for table in tables:
         cursor.execute(f"DROP TABLE IF EXISTS {table}")
 
@@ -267,7 +513,14 @@ def seed_database():
     conn.commit()
 
     # Print summary
-    for table in ['products', 'customers', 'orders', 'order_items', 'sales_reps', 'order_assignments']:
+    for table in [
+        "products",
+        "customers",
+        "orders",
+        "order_items",
+        "sales_reps",
+        "order_assignments",
+    ]:
         cursor.execute(f"SELECT COUNT(*) FROM {table}")
         count = cursor.fetchone()[0]
         print(f"  {table}: {count} rows")

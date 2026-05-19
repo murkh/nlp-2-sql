@@ -18,11 +18,11 @@ from openai import OpenAI, OpenAIError
 import app_constants as app_consts
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
 class LlmFacade:
-
     def __init__(self, model: str):
         self.model = model
         self.client = OpenAI(api_key=app_consts.OPENAI_API_KEY)
@@ -47,7 +47,9 @@ class LlmFacade:
 
         return generated_json
 
-    def query_openai(self, payload: str, temperature: float = 0.05, max_retries: int = 3):
+    def query_openai(
+        self, payload: str, temperature: float = 0.05, max_retries: int = 3
+    ):
         """
         Send a prompt to OpenAI using the Chat Completions API with JSON mode.
         Returns parsed JSON or None on failure.
@@ -81,7 +83,9 @@ class LlmFacade:
                     time.sleep(backoff)
                     backoff *= 2
                 else:
-                    logger.error(f"OpenAI API failed after {max_retries} attempts: {err}")
+                    logger.error(
+                        f"OpenAI API failed after {max_retries} attempts: {err}"
+                    )
                     result = None
             except (ValueError, json.JSONDecodeError) as err:
                 attempt += 1
@@ -94,4 +98,3 @@ class LlmFacade:
                     result = None
 
         return result
-

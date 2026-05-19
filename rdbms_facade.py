@@ -15,11 +15,11 @@ import sqlite3
 import app_constants as app_consts
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
 class RdbmsFacade:
-
     def execute_sql(self, database: str, sql_script: list[str]) -> dict:
         """
         Execute the SQL script against the specified database.
@@ -53,11 +53,13 @@ class RdbmsFacade:
             cursor = connection.cursor()
             try:
                 for stmt in sql_script:
-                    if not stmt or stmt.strip() == '':
+                    if not stmt or stmt.strip() == "":
                         iterations += 1
                         continue
 
-                    logger.debug(f"Executing SQL [{iterations}/{len(sql_script)}]: {stmt[:120]}...")
+                    logger.debug(
+                        f"Executing SQL [{iterations}/{len(sql_script)}]: {stmt[:120]}..."
+                    )
                     cursor.execute(stmt)
                     result = cursor.fetchall()
 
@@ -70,12 +72,16 @@ class RdbmsFacade:
                                 results.append(r)
                             status = app_consts.SUCCESS
                         else:
-                            logger.warning("Final SQL statement produced no column description")
+                            logger.warning(
+                                "Final SQL statement produced no column description"
+                            )
                     iterations += 1
 
             except sqlite3.Error as e:
                 logger.error(f"SQL execution error: {e}")
-                logger.error(f"Failed statement: {sql_script[iterations - 1] if iterations <= len(sql_script) else 'unknown'}")
+                logger.error(
+                    f"Failed statement: {sql_script[iterations - 1] if iterations <= len(sql_script) else 'unknown'}"
+                )
             finally:
                 cursor.close()
 

@@ -2,6 +2,7 @@
 Disambiguator - Evaluates natural language queries for ambiguity
 and generates clarifying questions when necessary before generating SQL.
 """
+
 from __future__ import annotations
 import logging
 import app_constants as app_consts
@@ -49,20 +50,23 @@ class Disambiguator:
             tuple: (is_ambiguous, clarification_question)
         """
         import domains
+
         if domain not in domains.contexts.keys():
             return False, None
 
         spec = domains.contexts[domain]
         # Include schema, join rules, and examples as context
         schema_and_rules = (
-            getattr(spec, "SYSTEM_PROMPT_INSTRUCTIONS", "") + "\n" +
-            getattr(spec, "JOIN_HINTS", "") + "\n<SQL>\n" +
-            getattr(spec, "ANNOTATED_SQL_DEFINITIONS", "") + "\n</SQL>"
+            getattr(spec, "SYSTEM_PROMPT_INSTRUCTIONS", "")
+            + "\n"
+            + getattr(spec, "JOIN_HINTS", "")
+            + "\n<SQL>\n"
+            + getattr(spec, "ANNOTATED_SQL_DEFINITIONS", "")
+            + "\n</SQL>"
         )
 
         prompt = DISAMBIGUATION_PROMPT_TEMPLATE.format(
-            schema_and_rules=schema_and_rules,
-            user_query=user_query
+            schema_and_rules=schema_and_rules, user_query=user_query
         )
 
         logger.info("Running query disambiguation check...")
@@ -70,14 +74,18 @@ class Disambiguator:
         output = llm_response.get(app_consts.LLM_OUTPUT)
 
         if not output:
-            logger.warning("Disambiguation check failed to return response, assuming clear.")
+            logger.warning(
+                "Disambiguation check failed to return response, assuming clear."
+            )
             return False, None
 
         is_ambiguous = output.get("is_ambiguous", False)
         clarification_question = output.get("clarification_question")
 
         if is_ambiguous and clarification_question:
-            logger.info(f"Query identified as ambiguous. Clarification: {clarification_question}")
+            logger.info(
+                f"Query identified as ambiguous. Clarification: {clarification_question}"
+            )
             return True, clarification_question
 
         logger.info("Query identified as clear.")

@@ -2,6 +2,7 @@
 Evaluator - LLM-as-a-Judge module to evaluate generated SQL queries
 against the user request and database schema.
 """
+
 from __future__ import annotations
 import logging
 import app_constants as app_consts
@@ -48,7 +49,9 @@ class LlmJudgeEvaluator:
     def __init__(self, llm: LlmFacade):
         self.llm = llm
 
-    def evaluate_query(self, user_query: str, generated_sql: str, query_results: list, domain: str) -> dict | None:
+    def evaluate_query(
+        self, user_query: str, generated_sql: str, query_results: list, domain: str
+    ) -> dict | None:
         """
         Run the LLM-as-a-judge evaluation.
 
@@ -56,14 +59,18 @@ class LlmJudgeEvaluator:
             dict: The evaluation report containing correctness_score, adherence_score, explanation.
         """
         import domains
+
         if domain not in domains.contexts.keys():
             return None
 
         spec = domains.contexts[domain]
         schema_and_rules = (
-            getattr(spec, "SYSTEM_PROMPT_INSTRUCTIONS", "") + "\n" +
-            getattr(spec, "JOIN_HINTS", "") + "\n<SQL>\n" +
-            getattr(spec, "ANNOTATED_SQL_DEFINITIONS", "") + "\n</SQL>"
+            getattr(spec, "SYSTEM_PROMPT_INSTRUCTIONS", "")
+            + "\n"
+            + getattr(spec, "JOIN_HINTS", "")
+            + "\n<SQL>\n"
+            + getattr(spec, "ANNOTATED_SQL_DEFINITIONS", "")
+            + "\n</SQL>"
         )
 
         # Format first few rows of results for context
@@ -71,17 +78,23 @@ class LlmJudgeEvaluator:
             query_results_text = "(No results returned)"
         else:
             limit_results = query_results[:6]  # Header + 5 rows
-            col_widths = [max(len(str(val)) for val in col) for col in zip(*limit_results)]
+            col_widths = [
+                max(len(str(val)) for val in col) for col in zip(*limit_results)
+            ]
             lines = []
             for row in limit_results:
-                lines.append(" | ".join(str(val).ljust(col_widths[i]) for i, val in enumerate(row)))
+                lines.append(
+                    " | ".join(
+                        str(val).ljust(col_widths[i]) for i, val in enumerate(row)
+                    )
+                )
             query_results_text = "\n".join(lines)
 
         prompt = EVALUATOR_PROMPT_TEMPLATE.format(
             user_query=user_query,
             schema_and_rules=schema_and_rules,
             generated_sql=generated_sql,
-            query_results_text=query_results_text
+            query_results_text=query_results_text,
         )
 
         logger.info("Invoking LLM Judge to evaluate the query...")

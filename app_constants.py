@@ -22,7 +22,7 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 # Feature Configuration Flags
 # ─────────────────────────────────────────────
 ENABLE_DISAMBIGUATION = True
-ENABLE_SELF_CONSISTENCY = False # Off by default, can be toggled
+ENABLE_SELF_CONSISTENCY = False  # Off by default, can be toggled
 SELF_CONSISTENCY_CANDIDATES = 3
 MAX_REPROMPT_ATTEMPTS = 2
 
