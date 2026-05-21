@@ -1,0 +1,33 @@
+# RBAC Role Definitions
+# ─────────────────────────────────────────────────────────────────
+# Defines access control roles for the Text-to-SQL system.
+# Each role specifies which tables and columns the user can query.
+
+roles:
+  admin:
+    description: "Full access to all tables and columns"
+    allowed_tables: "*"
+    denied_columns: []
+
+  analyst:
+    description: "Access to all sales data, but no customer PII (email)"
+    allowed_tables:
+      - products
+      - customers
+      - orders
+      - order_items
+      - sales_reps
+      - order_assignments
+    denied_columns:
+      - customers.email
+
+  viewer:
+    description: "Read-only access to aggregated sales data only"
+    allowed_tables:
+      - products
+      - orders
+      - order_items
+    denied_columns:
+      - customers.email
+      - customers.customer_name
+    require_aggregation: true
