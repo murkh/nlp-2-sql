@@ -1,0 +1,10 @@
+[project]
+name = "text2sql"
+version = "0.1.0"
+description = "NLP to SQL for Sales Management using LLMs - following AWS best practices"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.30.0",
+    "python-dotenv>=1.0.0",
+]
